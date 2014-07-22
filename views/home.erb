@@ -1,3 +1,4 @@
+<h2>Home Page</h2>
 <form method="post" action="/messages">
   <label for="message">Message:</label>
   <textarea type="text" col="40" row="5" id="message" name="message"></textarea><br>
@@ -6,7 +7,7 @@
 
 <% messages.each do |message| %>
 
-  <li><%= message["message"] %></li>
+  <li><%= message["message"] %> <a href="/messages/<%= message["id"]%>/edit">Edit</a></li>
 
 <% end %>
 

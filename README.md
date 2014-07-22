@@ -12,12 +12,12 @@ is left...
 
 ## Setup
 
-- `cp config/database.yml.example config/database.yml`
-- `rake db:create`
-- `rake db:migrate`
-- `RACK_ENV=test rake db:migrate`
+- `cp config/database.yml.example config/database.yml` X
+- `rake db:create` X
+- `rake db:migrate` X
+- `RACK_ENV=test rake db:migrate`X
 - `rspec`
-- create a new Pivotal Tracker project and import stories.csv
+- create a new Pivotal Tracker project and import stories.csv  X
 
 ## Putting the UD in CRUD
 

@@ -1,0 +1,13 @@
+<h1>Show Page</h1>
+
+
+<p><%= message["message"] %></p>
+
+<div class="actions">
+  <a href="/messages/<%= message["id"] %>/edit">Edit Message</a>
+
+  <form method="post" action="/messages/<%= message["id"] %>">
+    <input type="hidden" name="_method" value="delete"/>
+    <input type="submit" value="Delete Message"/>
+  </form>
+</div>
