@@ -1,0 +1,10 @@
+<h1>Comment on a Message</h1>
+
+<h3>Original message: </h3><h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= message["message"] %></h4>
+
+<form action="/comments/<%= message["id"] %>/comment" method="post">
+  <input type="hidden" name="_method" value="post"/>
+  <label for="comment">Comment:</label>
+  <input name="comment" value=""/>
+  <input type="submit" value="Add Comment"/>
+</form>

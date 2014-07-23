@@ -3,6 +3,7 @@ require "active_record"
 require "gschool_database_connection"
 require "rack-flash"
 require "./lib/message_table"
+require "./lib/comment_table"
 
 
 class App < Sinatra::Application
@@ -14,15 +15,32 @@ class App < Sinatra::Application
     @message_table = MessageTable.new(
       GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
     )
-    #@database_connection = GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
+    @comment_table = CommentTable.new(
+      GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
+    )
   end
 
+# -----get-----
   get "/" do
     messages = @message_table.all
-
-    erb :home, locals: {messages: messages}
+    comments = @comment_table.group #group by message id???
+    erb :home, locals: {messages: messages, comments: comments}
   end
 
+  get "/messages/:id/edit" do
+    message = @message_table.find(params[:id])
+    erb :"messages/edit", locals: {message: message}
+  end
+
+  get "/messages/:id/comment" do
+    message = @message_table.find(params[:id])
+    erb :"messages/comment", locals: {message: message}
+  end
+
+
+
+
+# -----post-----
   post "/messages" do
     message = params[:message]
     if message.length <= 140
@@ -33,42 +51,56 @@ class App < Sinatra::Application
     redirect "/"
   end
 
-  get "/messages/:id" do
-    message = @message_table.find(params[:id])
-    erb :"messages/show", locals: {message: message}
-  end
+  post "/comments/:id/comment" do
+    comment = params[:comment]
+    if comment.length <= 140
+      @comment_table.create(comment, params[:id])
+    else
+      flash[:error] = "Message must be less than 140 characters."
+      redirect "/comments/#{params[:id]}/comment"
+    end
 
-  get "/messages/:id/edit" do
-    message = @message_table.find(params[:id])
-    erb :"messages/edit", locals: {message: message}
-  end
-
-
-
-  post "/messages" do
-    id = @message_table.create(
-      message: params[:message]
-    )
-
-    flash[:notice] = "message created"
-
-    redirect "/messages/#{id}"
-  end
-
-  patch "/messages/:id" do
-    @message_table.update(params[:id], {
-      message: params[:message]
-    })
-
-    flash[:notice] = "message updated"
+    flash[:error] = "comment added"
 
     redirect "/"
   end
 
+
+  #   comment = params[:comment]
+  #   message_id = params[:message_id] #not sure if :id is right
+  #   if comment.length <= 140
+  #     @comment_table.create(comment, message_id)
+  #   else
+  #     flash[:error] = "Comment must be less than 140 characters."
+  #   end
+  #   redirect "/"
+  # end
+
+
+
+
+# -----patch-----
+  patch "/messages/:id" do
+
+    message = params[:message]
+    if message.length <= 140
+      @message_table.update(params[:id],message)
+    else
+      flash[:error] = "Message must be less than 140 characters."
+      redirect "/messages/#{params[:id]}/edit"
+    end
+
+    flash[:error] = "message updated"
+
+    redirect "/"
+  end
+
+
+# -----delete-----
   delete "/messages/:id" do
     @message_table.delete(params[:id])
 
-    flash[:notice] = "message deleted"
+    flash[:error] = "message deleted"
 
     redirect "/"
   end

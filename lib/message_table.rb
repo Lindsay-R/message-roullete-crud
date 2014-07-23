@@ -27,14 +27,25 @@ class MessageTable
 
     update_sql = <<-SQL
     UPDATE messages
-    SET message = '#{attributes[:message]}'
+    SET message = '#{attributes}'
     WHERE id = #{id};
     SQL
-    puts "--------------------------------"
-    puts update_sql
+     # puts "--------------------------------"
+     # puts update_sql
 
     @database_connection.sql(update_sql)
 
   end
+
+  def delete(id)
+    delete_sql = <<-SQL
+    DELETE
+    FROM messages
+    WHERE id = #{id};
+    SQL
+
+    @database_connection.sql(delete_sql)
+  end
+
 
 end#class end

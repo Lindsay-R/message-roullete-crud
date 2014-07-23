@@ -4,10 +4,52 @@
   <textarea type="text" col="40" row="5" id="message" name="message"></textarea><br>
   <button>Submit</button>
 </form>
+<br>
+<br>
 
-<% messages.each do |message| %>
 
-  <li><%= message["message"] %> <a href="/messages/<%= message["id"]%>/edit">Edit</a></li>
+<% messages.each do |comment| %>
+
+  <li><%= comment["message"] %>
+    <a href="/messages/<%= comment["id"]%>/edit">Edit</a>
+    <a href="/messages/<%= comment["id"]%>/comment">Comment</a>
+      <form action="/messages/<%= comment["id"]%>" method="post">
+        <input type="hidden" name="_method" value="delete"/>
+        <input type="submit" value="Delete"/>
+      </form>
+
+    <% comments.each do |comment2| %>
+      <% if comment2["id"] == comment["id"]%>
+      <li><%= comment2["comment"]%></li>
+    <% end %>
+  <% end %>
+  </li>
+
+  <br>
+  <br>
 
 <% end %>
+
+
+
+
+<!--messages.inspect-->
+<!--comments.inspect-->
+
+
+
+<!--comments.each do |comment|-->
+<!--comment["comment"]-->
+<!--end-->
+
+
+ <!--comments.any? {|i| i["message_id"] == "12"}-->
+
+
+
+<!--comments.group_by {|i| i["message_id"] == "12"}-->
+
+
+
+
 
