@@ -16,8 +16,9 @@ class CommentTable
   end
 
   def find(message_id)
-    database_connection.sql("SELECT * FROM comments WHERE message_id = #{message_id}")
+    database_connection.sql("SELECT comment FROM comments WHERE message_id = #{message_id}")
   end
+
 
   def all
     database_connection.sql("SELECT * FROM comments")

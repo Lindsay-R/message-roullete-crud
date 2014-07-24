@@ -37,6 +37,12 @@ class App < Sinatra::Application
     erb :"messages/comment", locals: {message: message}
   end
 
+  get "/messages/:id/message_page" do   #trying to connect to message_page
+    messages = @message_table.find(params[:id])
+    comments_by_message_id = @comment_table.find(params[:id])
+    erb :"messages/message_page", locals: {messages: messages, comments_by_message_id: comments_by_message_id}
+  end
+
 
 
 
@@ -66,15 +72,11 @@ class App < Sinatra::Application
   end
 
 
-  #   comment = params[:comment]
-  #   message_id = params[:message_id] #not sure if :id is right
-  #   if comment.length <= 140
-  #     @comment_table.create(comment, message_id)
-  #   else
-  #     flash[:error] = "Comment must be less than 140 characters."
-  #   end
-  #   redirect "/"
-  # end
+  post "/messages/:message_id/message_page" do #trying to show info on message_page
+    comment = params[:comment]
+    @comment_table.create(comment, params[:message_id])
+    redirect "/"
+  end
 
 
 
