@@ -23,8 +23,8 @@ class App < Sinatra::Application
 # -----get-----
   get "/" do
     messages = @message_table.all
-    comments = @comment_table.group #group by message id???
-    erb :home, locals: {messages: messages, comments: comments}
+    comments_by_message_id = @comment_table.all.group_by{ |comment| comment["message_id"]}  #group by message id???
+    erb :home, locals: {messages: messages, comments_by_message_id: comments_by_message_id}
   end
 
   get "/messages/:id/edit" do

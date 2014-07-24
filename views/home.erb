@@ -7,22 +7,22 @@
 <br>
 <br>
 
+<% messages.each do |message| %>
 
-<% messages.each do |comment| %>
+  <li><%= message["message"] %>
+    <a href="/messages/<%= message["id"]%>/edit">Edit</a>
+    <a href="/messages/<%= message["id"]%>/comment">Comment</a>
+    <form action="/messages/<%= message["id"]%>" method="post">
+      <input type="hidden" name="_method" value="delete"/>
+      <input type="submit" value="Delete"/>
+    </form>
 
-  <li><%= comment["message"] %>
-    <a href="/messages/<%= comment["id"]%>/edit">Edit</a>
-    <a href="/messages/<%= comment["id"]%>/comment">Comment</a>
-      <form action="/messages/<%= comment["id"]%>" method="post">
-        <input type="hidden" name="_method" value="delete"/>
-        <input type="submit" value="Delete"/>
-      </form>
-
-    <% comments.each do |comment2| %>
-      <% if comment2["id"] == comment["id"]%>
-      <li><%= comment2["comment"]%></li>
+    <% comments_by_message_id[message["id"]].each do |comment| %>
+      <% if comment["id"] == comment["id"]%>
+      <li><%= comment["comment"]%></li>
     <% end %>
   <% end %>
+
   </li>
 
   <br>
@@ -33,9 +33,17 @@
 
 
 
-<!--messages.inspect-->
-<!--comments.inspect-->
 
+<!--messages.inspect-->
+<%= comments_by_message_id.inspect %>
+<br>
+<br>
+
+<%= comments_by_message_id["12"] %>
+<br>
+<br>
+
+<%= comments_by_message_id["13"] %>
 
 
 <!--comments.each do |comment|-->
